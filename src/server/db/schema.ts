@@ -8,6 +8,7 @@ import {
   serial,
   timestamp,
   varchar,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -22,15 +23,16 @@ export const posts = createTable(
   "post",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
+    url: varchar("url").notNull(),
+    caption: varchar("caption"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date()
-    ),
+    // updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+    //   () => new Date()
+    // ),
   },
   (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
+    urlIndex: index("url_idx").on(example.url),
+  }),
 );
