@@ -39,10 +39,15 @@ export default function LoginForm() {
     setError("");
     setSuccess("");
     startTransition(async () => {
-      await login(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
-      });
+      const data = await login(values)
+        // console.log(data);
+        .then((data) => {
+          if (data.error) {
+            setError(data.error);
+          } else if (data.success) {
+            setSuccess(data.success);
+          }
+        });
     });
   };
 
