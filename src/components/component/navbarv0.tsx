@@ -36,6 +36,8 @@ import {
   DropdownMenuSeparator,
 } from "~/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "~/components/ui/avatar";
+import { LoginBtn } from "./login-btn";
+import { Button } from "../ui/button";
 
 export function Navbarv0() {
   return (
@@ -89,13 +91,19 @@ export function Navbarv0() {
           </NavigationMenu>
         </nav>
         <div className="flex items-center gap-2">
-          <Link
+          {/* <Link
             href="/api/auth/signin"
             className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring inline-flex h-9 items-center justify-center rounded-md px-4 py-2 text-sm font-medium shadow transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50"
             prefetch={false}
           >
             Sign In
-          </Link>
+          </Link> */}
+          {/* <LoginBtn /> */}
+          <LoginBtn>
+            <Button className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring inline-flex h-9 items-center justify-center rounded-md px-4 py-2 text-sm font-medium shadow transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50">
+              Sign In
+            </Button>
+          </LoginBtn>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="h-9 w-9">
