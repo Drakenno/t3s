@@ -3,8 +3,8 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { Navbarv0 } from "~/components/component/navbarv0";
-import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
+// import { db } from "~/server/db";
+// import { users } from "~/server/db/schema";
 
 export const metadata: Metadata = {
   title: "Social-Media-App",

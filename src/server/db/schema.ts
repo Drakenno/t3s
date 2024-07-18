@@ -8,7 +8,6 @@ import {
   serial,
   timestamp,
   varchar,
-  boolean,
   text,
   integer,
   primaryKey,

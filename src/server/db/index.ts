@@ -5,9 +5,9 @@ import { drizzle } from "drizzle-orm/vercel-postgres";
 import { env } from "~/env";
 import * as schema from "./schema";
 import { createPool } from "@vercel/postgres";
-import * as z from "zod";
+// import * as z from "zod";
 
-import { createClient } from "@vercel/postgres";
+// import { createClient } from "@vercel/postgres";
 
 /**
  * Cache the database connection in development. This avoids creating a new connection on every HMR

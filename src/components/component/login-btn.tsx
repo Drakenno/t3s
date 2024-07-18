@@ -1,12 +1,10 @@
 "use client";
-import { auth, signIn } from "~/auth";
-import { Button } from "../ui/button";
-// import { use } from "react";
-import { login } from "~/server/actions";
-import { useState } from "react";
-import { Session } from "next-auth";
+// import { auth, signIn } from "~/auth";
+// import { Button } from "../ui/button";
+// import { login } from "~/server/actions";
+// import { useState } from "react";
+// import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
-import { on } from "events";
 
 type LoginBtnProps = {
   children: React.ReactNode;
