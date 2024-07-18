@@ -124,7 +124,7 @@ export function Navbarv0() {
   );
 }
 
-function MountainIcon(props: any) {
+function MountainIcon(props: { className?: string }) {
   return (
     <svg
       {...props}
@@ -143,10 +143,10 @@ function MountainIcon(props: any) {
   );
 }
 
-function XIcon(props: any) {
+function XIcon() {
   return (
     <svg
-      {...props}
+      // {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"

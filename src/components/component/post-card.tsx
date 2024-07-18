@@ -23,13 +23,14 @@ import { useState } from "react";
 import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
+import Image from "next/image";
 
 export function PostCard() {
   const [isLiked, setIsLiked] = useState(false);
   return (
     <Card className="group w-full max-w-md">
       <CardContent className="p-0">
-        <img
+        <Image
           src="/placeholder.svg"
           alt="Post image"
           width={800}
@@ -71,7 +72,7 @@ export function PostCard() {
   );
 }
 
-function HeartIcon(props: any) {
+function HeartIcon(props: { className?: string }) {
   return (
     <svg
       {...props}
@@ -90,10 +91,10 @@ function HeartIcon(props: any) {
   );
 }
 
-function XIcon(props: any) {
+function XIcon() {
   return (
     <svg
-      {...props}
+      // {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
