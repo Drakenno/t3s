@@ -26,7 +26,7 @@ export function LoginBtn({
   //   };
   const router = useRouter();
   const onClick = () => {
-    router.push("/login");
+    router.push("/auth/login");
   };
   return (
     <span onClick={onClick} className="cursor-pointer">

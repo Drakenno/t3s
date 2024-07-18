@@ -1,4 +1,4 @@
-import Link from "next/link";
+// import Link from "next/link";
 import { PostCard } from "~/components/component/post-card";
 
 export default function HomePage() {

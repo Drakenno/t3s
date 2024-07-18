@@ -52,6 +52,7 @@ export const users = createTable("user", {
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
   email: text("email").notNull(),
+  password: text("password"),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
 });
@@ -102,23 +103,25 @@ export const verificationTokens = createTable(
   }),
 );
 
-export const authenticators = createTable(
-  "authenticator",
-  {
-    credentialID: text("credentialID").notNull().unique(),
-    userId: text("userId")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    providerAccountId: text("providerAccountId").notNull(),
-    credentialPublicKey: text("credentialPublicKey").notNull(),
-    counter: integer("counter").notNull(),
-    credentialDeviceType: text("credentialDeviceType").notNull(),
-    credentialBackedUp: boolean("credentialBackedUp").notNull(),
-    transports: text("transports"),
-  },
-  (authenticator) => ({
-    compositePK: primaryKey({
-      columns: [authenticator.userId, authenticator.credentialID],
-    }),
-  }),
-);
+// export const authenticators = createTable(
+//   "authenticator",
+//   {
+//     credentialID: text("credentialID").notNull().unique(),
+//     userId: text("userId")
+//       .notNull()
+//       .references(() => users.id, { onDelete: "cascade" }),
+//     providerAccountId: text("providerAccountId").notNull(),
+//     credentialPublicKey: text("credentialPublicKey").notNull(),
+//     counter: integer("counter").notNull(),
+//     credentialDeviceType: text("credentialDeviceType").notNull(),
+//     credentialBackedUp: boolean("credentialBackedUp").notNull(),
+//     transports: text("transports"),
+//   },
+//   (authenticator) => ({
+//     compositePK: primaryKey({
+//       columns: [authenticator.userId, authenticator.credentialID],
+//     }),
+//   }),
+// );
+
+// export const user =

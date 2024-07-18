@@ -8,7 +8,7 @@ type BackButtonProps = {
 };
 export default function BackButton({ href, label }: BackButtonProps) {
   return (
-    <Button className="flex flex-row justify-center gap-x-2">
+    <Button className="flex flex-row justify-center gap-x-2" variant="link">
       <Link href={href}>{label}</Link>
     </Button>
   );
