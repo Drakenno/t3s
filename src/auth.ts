@@ -1,13 +1,22 @@
-import NextAuth, { NextAuthConfig } from "next-auth";
+import NextAuth, { NextAuthConfig, type DefaultSession } from "next-auth";
 import Google from "next-auth/providers/google";
 import Discord from "next-auth/providers/discord";
 import Credentials from "next-auth/providers/credentials";
 import { db } from "./server/db";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { users, accounts } from "./server/db/schema";
+import { users, accounts, UserRole } from "./server/db/schema";
 import { LoginSchema } from "./app/auth/login";
-import { getUserByEmail } from "./server/actions";
+import { getUserByEmail, getUserById } from "./server/actions";
 import bcrypt from "bcryptjs";
+import { env } from "./env";
+
+// declare module "next-auth" {
+//   interface Session {
+//     user: {
+//       role: "user" | "admin";
+//     } & DefaultSession["user"];
+//   }
+// }
 
 export const authConfig = {
   adapter: DrizzleAdapter(db, {
@@ -19,6 +28,11 @@ export const authConfig = {
     maxAge: 600,
   },
   providers: [
+    Google({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+    Discord,
     Credentials({
       credentials: { email: {}, password: {} },
       authorize: async (credentials) => {
@@ -43,6 +57,26 @@ export const authConfig = {
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token }) {
+      if (!token.sub) return token;
+      const exsistingUser = await getUserById(token.sub);
+      if (!exsistingUser) {
+        return token;
+      }
+      token.role = exsistingUser.role as UserRole;
+      return token;
+    },
+    async session({ token, session }) {
+      if (token.sub && session.user) {
+        session.user.id = token.sub;
+      }
+      if (token.role && session.user) {
+        session.user.role = token.role as UserRole;
+      }
+      return session;
+    },
+  },
 } satisfies NextAuthConfig;
 
 export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);

@@ -45,6 +45,8 @@ export const posts = createTable(
   }),
 );
 
+export type UserRole = "user" | "admin";
+
 export const users = createTable("user", {
   id: text("id")
     .primaryKey()
@@ -52,6 +54,7 @@ export const users = createTable("user", {
   name: text("name"),
   email: text("email").notNull(),
   password: text("password"),
+  role: text("role").$type<UserRole>().notNull().default("user"),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
 });

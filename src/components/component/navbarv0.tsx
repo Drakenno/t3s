@@ -38,6 +38,7 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "~/components/ui/avatar";
 import { LoginBtn } from "./login-btn";
 import { Button } from "../ui/button";
+import Image from "next/image";
 
 export function Navbarv0() {
   return (
