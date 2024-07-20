@@ -13,6 +13,8 @@ import {
   primaryKey,
 } from "drizzle-orm/pg-core";
 
+import { UserRole } from "~/server/actions";
+
 import type { AdapterAccountType } from "next-auth/adapters";
 
 /**
@@ -27,15 +29,12 @@ export const posts = createTable(
   "post",
   {
     id: serial("id").primaryKey(),
-    url: varchar("url").notNull(),
-    caption: varchar("caption"),
+    url: varchar("url", { length: 1024 }).notNull(),
+    caption: varchar("caption", { length: 1024 }),
     likes: integer("likes").default(0),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    // updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-    //   () => new Date()
-    // ),
     userID: text("userID")
       .notNull()
       .references(() => users.id),
@@ -45,7 +44,31 @@ export const posts = createTable(
   }),
 );
 
-export type UserRole = "user" | "admin";
+export const messages = createTable("message", {
+  id: serial("id").primaryKey(),
+  senderID: text("sender_id")
+    .notNull()
+    .references(() => users.id),
+  receiverID: text("receiver_id")
+    .notNull()
+    .references(() => users.id),
+  content: text("message").notNull(),
+  created_at: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
+export const comments = createTable("comment", {
+  id: serial("id").primaryKey(),
+  postID: integer("post_id")
+    .notNull()
+    .references(() => posts.id),
+  content: text("content").notNull(),
+  likes: integer("likes").default(0),
+  created_at: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
 
 export const users = createTable("user", {
   id: text("id")
@@ -56,7 +79,9 @@ export const users = createTable("user", {
   password: text("password"),
   role: text("role").$type<UserRole>().notNull().default("user"),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
-  image: text("image"),
+  image: varchar("avatar", { length: 1024 }).default(
+    "https://utfs.io/f/b5b33a74-6a71-4140-a418-cf7ec21a5f2b-qerhnf.jpg",
+  ),
 });
 
 export const accounts = createTable(
@@ -82,48 +107,3 @@ export const accounts = createTable(
     }),
   }),
 );
-
-// export const sessions = createTable("session", {
-//   sessionToken: text("sessionToken").primaryKey(),
-//   userId: text("userId")
-//     .notNull()
-//     .references(() => users.id, { onDelete: "cascade" }),
-//   expires: timestamp("expires", { mode: "date" }).notNull(),
-// });
-
-// export const verificationTokens = createTable(
-//   "verificationToken",
-//   {
-//     identifier: text("identifier").notNull(),
-//     token: text("token").notNull(),
-//     expires: timestamp("expires", { mode: "date" }).notNull(),
-//   },
-//   (verificationToken) => ({
-//     compositePk: primaryKey({
-//       columns: [verificationToken.identifier, verificationToken.token],
-//     }),
-//   }),
-// );
-
-// export const authenticators = createTable(
-//   "authenticator",
-//   {
-//     credentialID: text("credentialID").notNull().unique(),
-//     userId: text("userId")
-//       .notNull()
-//       .references(() => users.id, { onDelete: "cascade" }),
-//     providerAccountId: text("providerAccountId").notNull(),
-//     credentialPublicKey: text("credentialPublicKey").notNull(),
-//     counter: integer("counter").notNull(),
-//     credentialDeviceType: text("credentialDeviceType").notNull(),
-//     credentialBackedUp: boolean("credentialBackedUp").notNull(),
-//     transports: text("transports"),
-//   },
-//   (authenticator) => ({
-//     compositePK: primaryKey({
-//       columns: [authenticator.userId, authenticator.credentialID],
-//     }),
-//   }),
-// );
-
-// export const user =

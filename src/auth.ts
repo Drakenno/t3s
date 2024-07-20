@@ -4,7 +4,8 @@ import Discord from "next-auth/providers/discord";
 import Credentials from "next-auth/providers/credentials";
 import { db } from "./server/db";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { users, accounts, UserRole } from "./server/db/schema";
+import { users, accounts } from "./server/db/schema";
+import { UserRole } from "./server/actions";
 import { LoginSchema } from "./app/auth/login";
 import { getUserByEmail, getUserById } from "./server/actions";
 import bcrypt from "bcryptjs";
@@ -25,7 +26,6 @@ export const authConfig = {
   }),
   session: {
     strategy: "jwt",
-    maxAge: 600,
   },
   providers: [
     Google({
