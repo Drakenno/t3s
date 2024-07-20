@@ -45,10 +45,11 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     const result = await signIn("credentials", {
       email,
       password,
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
     console.log("RESULT of SIGNIN: ", result);
     // console.log(result);
-    redirect("/settings");
+    // redirect("/settings");
     return { error: "", success: "SignIn successful" };
   } catch (error) {
     if (error instanceof AuthError) {
@@ -174,7 +175,7 @@ export type UserChatData = {
 //   return userChatData;
 // };
 
-export const getUserChatData = async (userId: string) => {
+export const getUserMessages = async (userId: string) => {
   const allMessages = await db
     .select()
     .from(messages)
@@ -183,6 +184,50 @@ export const getUserChatData = async (userId: string) => {
   const sendDeets = await db.query.users.findFirst({
     where: eq(users.id, userId),
   });
+  // console.log(sendDeets?.image);
   // const result =
   return allMessages;
+};
+
+export const getImgById = async (id: string) => {
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, id),
+  });
+  // console.log(user?.image);
+  return user?.image;
+};
+
+export const getNameById = async (id: string) => {
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, id),
+  });
+  return user?.name;
+};
+
+export const getFormattedMessgesById = async (userId: string) => {
+  const allMessages = await getUserMessages(userId);
+  // console.log(allMessages);
+  const result = await Promise.all(
+    allMessages.map(async (message) => ({
+      id: message.id,
+      avatar: await getImgById(message.receiverID),
+      name: await getNameById(message.receiverID),
+      content: message.content,
+    })),
+  );
+  // console.log(result);
+  return result;
+};
+
+export const getUserChatDataById = async (userId: string) => {
+  const formattedMessages = await getFormattedMessgesById(userId);
+  const avatar = await getImgById(userId);
+  const result = {
+    id: userId,
+    avatar: avatar,
+    messages: formattedMessages,
+    name: await getNameById(userId),
+  };
+  console.log(result);
+  return result;
 };

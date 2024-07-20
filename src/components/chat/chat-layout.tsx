@@ -15,12 +15,14 @@ type ChatLayoutProps = {
   defaultLayout: number[] | undefined;
   defaultCollapsed?: boolean;
   navCollapsedSize: number;
+  currentUserId: string;
 };
 
 export function ChatLayout({
   defaultLayout = [320, 480],
   defaultCollapsed = false,
   navCollapsedSize,
+  currentUserId,
 }: ChatLayoutProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
   const [selectedUser, setSelectedUser] = React.useState(userData[0]);
