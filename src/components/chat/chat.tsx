@@ -10,13 +10,24 @@ type ChatProps = {
   selectedUser: UserChatData;
   isMobile: boolean;
   session: Session | null;
+  strippedLoggedInUserData: { id: string; name: string; avatar: string };
 };
 
-export function Chat({ messages, selectedUser, isMobile, session }: ChatProps) {
+export function Chat({
+  messages,
+  selectedUser,
+  isMobile,
+  session,
+  strippedLoggedInUserData,
+}: ChatProps) {
   const [messagesState, setMessages] = React.useState<Message[]>(
-    messages ?? [],
+    messages?.sort((a, b) => a.id - b.id) ?? [],
   );
-
+  console.log({
+    messages: messages,
+    selectedUser: selectedUser,
+    strippedLoggedInUserData: strippedLoggedInUserData,
+  });
   const sendMessage = async (newMessage: Message) => {
     setMessages([...messagesState, newMessage]);
     await messageDbPush(newMessage, session?.user.id, selectedUser.id);
@@ -31,6 +42,7 @@ export function Chat({ messages, selectedUser, isMobile, session }: ChatProps) {
         selectedUser={selectedUser}
         sendMessage={sendMessage}
         isMobile={isMobile}
+        strippedLoggedInUserData={strippedLoggedInUserData}
       />
     </div>
   );

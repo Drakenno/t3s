@@ -1,6 +1,6 @@
 import { Message, UserChatData } from "~/server/actions";
 import { cn } from "~/lib/utils";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import ChatBottombar from "./chat-bottombar";
 import { AnimatePresence, motion } from "framer-motion";
@@ -10,6 +10,7 @@ type ChatListProps = {
   selectedUser: UserChatData;
   sendMessage: (newMessage: Message) => void;
   isMobile: boolean;
+  strippedLoggedInUserData: { id: string; name: string; avatar: string };
 };
 
 export function ChatList({
@@ -17,17 +18,28 @@ export function ChatList({
   selectedUser,
   sendMessage,
   isMobile,
+  strippedLoggedInUserData,
 }: ChatListProps) {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const [relevantMessages, setRelevantMessages] = useState<Message[]>(
+    messages || [],
+  );
 
   React.useEffect(() => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop =
         messagesContainerRef.current.scrollHeight;
     }
+    setRelevantMessages((relevantMessages) =>
+      relevantMessages?.filter(
+        (message) =>
+          message.name === selectedUser.name ||
+          message.name === strippedLoggedInUserData.name,
+      ),
+    );
   }, [messages]);
 
-  // console.log({ messages: messages });
+  console.log({ messages: messages });
   // console.log({ selectedUser: selectedUser });
 
   return (
@@ -92,7 +104,11 @@ export function ChatList({
           ))}
         </AnimatePresence>
       </div>
-      <ChatBottombar sendMessage={sendMessage} isMobile={isMobile} />
+      <ChatBottombar
+        sendMessage={sendMessage}
+        isMobile={isMobile}
+        strippedLoggedInUserData={strippedLoggedInUserData}
+      />
     </div>
   );
 }

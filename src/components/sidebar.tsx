@@ -76,7 +76,7 @@ export default function Sidebar({
               <Tooltip key={link.id} delayDuration={0}>
                 <TooltipTrigger asChild>
                   <LinkCollapsed
-                    chatYN={chatYN}
+                    // chatYN={chatYN}
                     session={session}
                     link={link}
                   ></LinkCollapsed>
@@ -94,7 +94,7 @@ export default function Sidebar({
               // index={link.id}
               key={link.id}
               link={link}
-              chatYN={chatYN}
+              // chatYN={chatYN}
               session={session}
             />
           ),

@@ -102,87 +102,34 @@ export type UserChatData = {
   name: string;
 };
 
-// export const getUserChatData = async (userId: string) => {
-//   const user = await db.query.users.findFirst({
-//     where: eq(users.id, userId),
-//   });
-//   const chats = await db
-//     .select()
-//     .from(messages).j
-//     .where(eq(messages.senderID, userId));
-//   return {
-//     id: user?.id,
-//     name: user?.name,
-//     email: user?.email,
-//     avatar: user?.avatar,
-//     messages: messages.map((message) => ({
-//       id: message.id,
-//       avatar:
-//         message.senderID === user.id ? user.avatar : loggedInUserData.avatar,
-//       name: message.senderID === user.id ? user.name : loggedInUserData.name,
-//       content: message.content,
-//     })),
-//   };
-// };
-
-// export const getUserChatData = async (userId: string) => {
-//   // Fetch user data
-//   const user = await db.select().from(users).where(eq(users.id, userId));
-
-//   if (!user) {
-//     return null; // User not found
-//   }
-
-//   // Fetch messages where the user is either sender or receiver
-//   const userMessages = await db
-//     .select()
-//     .from(messages)
-//     .where(or(eq(messages.senderID, userId), eq(messages.receiverID, userId)))
-//     .orderBy(desc(messages.created_at));
-
-//   // Format messages
-//   const formattedMessages: Message[] = await Promise.all(
-//     userMessages.map(async (msg) => {
-//       // Fetch sender's name and avatar
-//       const sender = await db
-//         .select()
-//         .from(users)
-//         .where(eq(users.id, msg.senderID));
-//       console.log(sender);
-//       return {
-//         id: msg.id,
-//         avatar: sender[0]?.avatar || "",
-//         sname: sender[0]?.name || "",
-//         sID: msg.senderID,
-//         rID: msg.receiverID,
-//         content: msg.content,
-//       };
-//     }),
-//   );
-
-//   // Prepare user chat data
-//   const userChatData: UserChatData = {
-//     id: user[0]!.id,
-//     name: user[0]!.name!,
-//     email: user[0]!.email,
-//     avatar: user[0]!.avatar!,
-//     messages: formattedMessages,
-//   };
-
-//   return userChatData;
-// };
-
-export const getUserMessages = async (userId: string) => {
+export const getUserMessages = async (loginId: string, userId: string) => {
   const allMessages = await db
     .select()
     .from(messages)
-    .where(or(eq(messages.senderID, userId), eq(messages.receiverID, userId)));
+    .where(
+      or(
+        and(eq(messages.senderID, loginId), eq(messages.receiverID, userId)),
+        and(eq(messages.senderID, userId), eq(messages.receiverID, loginId)),
+      ),
+    );
 
-  const sendDeets = await db.query.users.findFirst({
-    where: eq(users.id, userId),
-  });
+  // const userSentMessages = await db
+  //   .select()
+  //   .from(messages)
+  //   .where(eq(messages.senderID, loginId));
+  // const userReceivedMessages = await db
+  //   .select()
+  //   .from(messages)
+  //   .where(eq(messages.receiverID, loginId));
+  // // console.log();
+  // const ALLmessages = [...userSentMessages, ...userReceivedMessages];
+
+  // const sendDeets = await db.query.users.findFirst({
+  //   where: eq(users.id, userId),
+  // });
   // console.log(sendDeets?.image);
   // const result =
+  console.log({ allMessages: allMessages });
   return allMessages;
 };
 
@@ -212,24 +159,28 @@ export const getNameById = async (id: string) => {
   }
 };
 
-export const getFormattedMessgesById = async (userId: string) => {
-  const allMessages = await getUserMessages(userId);
-  // console.log(allMessages);
+export const getFormattedMessgesById = async (
+  loginId: string,
+  userId: string,
+) => {
+  const allMessages = await getUserMessages(loginId, userId);
+  // console.log({ allMessages: allMessages });
   const result = await Promise.all(
     allMessages.map(async (message) => ({
       id: message.id,
-      avatar: await getImgById(message.receiverID),
-      name: await getNameById(message.receiverID),
+      avatar: await getImgById(message.senderID),
+      name: await getNameById(message.senderID),
       content: message.content,
     })),
   );
-  // console.log(result);
+  // console.log({ result_of_formatted_messages: result });
   return result;
 };
 
-export const getUserChatDataById = async (userId: string) => {
-  const formattedMessages = await getFormattedMessgesById(userId);
+export const getUserChatDataById = async (userId: string, loginId: string) => {
+  const formattedMessages = await getFormattedMessgesById(loginId, userId);
   const avatar = await getImgById(userId);
+  // console.log({ formattedMessages: formattedMessages });
   const result = {
     id: userId,
     avatar: avatar,
@@ -241,32 +192,32 @@ export const getUserChatDataById = async (userId: string) => {
   return result;
 };
 
-export const getAllUserChatData = async () => {
-  const allUserIds = await db.select({ id: users.id }).from(users);
-  const allUserChatData = await Promise.all(
-    allUserIds.map(async (userId) => {
-      return await getUserChatDataById(userId.id);
-    }),
-  );
+// export const getAllUserChatData = async () => {
+//   const allUserIds = await db.select({ id: users.id }).from(users);
+//   const allUserChatData = await Promise.all(
+//     allUserIds.map(async (userId) => {
+//       return await getUserChatDataById(userId.id);
+//     }),
+//   );
 
-  return allUserChatData;
-};
+//   return allUserChatData;
+// };
 
 export const getAllUserChatDataExceptCurrentUser = async (
   loggedInID: string,
 ) => {
-  console.log({ loggedInID: loggedInID });
+  // console.log({ loggedInID: loggedInID });
   const restUserIds = await db
     .select({ id: users.id })
     .from(users)
     .where(not(eq(users.id, loggedInID)));
-  console.log({ restUserIds: restUserIds });
+  // console.log({ restUserIds: restUserIds });
   const allUserChatData = await Promise.all(
     restUserIds.map(async (userId) => {
-      return await getUserChatDataById(userId.id);
+      return await getUserChatDataById(userId.id, loggedInID);
     }),
   );
-
+  // console.log({ allUserChatData: allUserChatData });
   return allUserChatData;
 };
 
@@ -283,13 +234,28 @@ export const messageDbPush = async (
   selectedUserId: string,
 ) => {
   try {
+    console.log({
+      loggedInUserId: loggedInUserId,
+      selectedUserId: selectedUserId,
+      newMessage: newMessage,
+    });
     await db.insert(messages).values({
       content: newMessage.content,
       senderID: loggedInUserId,
       receiverID: selectedUserId,
       created_at: new Date(),
     });
+    console.log({ newMessage: newMessage });
   } catch (e) {
     console.log(e);
   }
+};
+
+export const getStrippedloggedInUserData = async (id: string) => {
+  const user = await db
+    .select({ id: users.id, name: users.name, avatar: users.image })
+    .from(users)
+    .where(eq(users.id, id));
+  // console.log({ user: user });
+  return user[0]!;
 };

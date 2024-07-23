@@ -10,36 +10,37 @@ import { useEffect, useState } from "react";
 
 export type LinksProps = {
   key: string;
-  chatYN: boolean;
+  // chatYN: boolean;
   session: Session | null;
 
   link: LinkProperties;
 };
-export default function Links({ chatYN, session, link }: LinksProps) {
+export default function Links({ session, link }: LinksProps) {
   const [origin, setOrigin] = useState("");
   useEffect(() => {
     setOrigin(window.location.origin);
   }, []);
   const convertLinkIdsToHrefsUsingChatYN = (
-    chatYN: boolean,
+    // chatYN: boolean,
     session: Session | null,
     uid: string,
   ) => {
-    if (chatYN) {
-      const x = {
-        chatYN: chatYN,
-        id: session?.user.id,
-        uid: uid,
-        pathname: origin + "/users/" + session?.user.id + "/" + uid,
-      };
-      return x.pathname;
-    }
-    return origin + "/users/" + session?.user.id + "/";
+    // if (chatYN) {
+    const x = {
+      // chatYN: chatYN,
+      id: session?.user.id,
+      uid: uid,
+      pathname: origin + "/users/" + session?.user.id + "/" + uid,
+      // };
+    };
+    return x.pathname;
+
+    // return origin + "/users/" + session?.user.id + "/";
   };
   return (
     <Link
       key={link.id}
-      href={convertLinkIdsToHrefsUsingChatYN(chatYN, session, link.id)}
+      href={convertLinkIdsToHrefsUsingChatYN(session, link.id)}
       className={cn(
         buttonVariants({ variant: link.variant, size: "xl" }),
         link.variant === "grey" &&

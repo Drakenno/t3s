@@ -2,6 +2,7 @@ import { auth } from "~/auth";
 import ChatLayout from "./chat-layout";
 import {
   getAllUserChatDataExceptCurrentUser,
+  getStrippedloggedInUserData,
   getUserChatDataById,
 } from "~/server/actions";
 import { env } from "~/env";
@@ -26,9 +27,14 @@ export default async function ChatLayoutWrapper({
   // const session = useSession();
   // const loginID = session?.data?.user?.id;
   // console.log({ loginID: session?.data?.user?.id });
-  const data = await getUserChatDataById(uid);
+
   const session = await auth();
   const loggedInUserdata = await getAllUserChatDataExceptCurrentUser(
+    session?.user.id,
+  );
+  // console.log({ loggedInUserdata: loggedInUserdata });
+  const data = await getUserChatDataById(uid, session?.user.id);
+  const strippedLoggedInUserData = await getStrippedloggedInUserData(
     session?.user.id,
   );
 
@@ -41,6 +47,7 @@ export default async function ChatLayoutWrapper({
         chatYN={chatYN}
         currentUserData={data}
         session={session}
+        strippedLoggedInUserData={strippedLoggedInUserData}
       />
     </div>
   );

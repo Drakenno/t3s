@@ -13,7 +13,7 @@ import { buttonVariants } from "../ui/button";
 import { cn } from "~/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Message } from "~/server/actions";
-import { loggedInUserData } from "~/app/data";
+// import { loggedInUserData } from "~/app/data";
 import { Textarea } from "../ui/textarea";
 import { EmojiPicker } from "../emoji-picker";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -21,6 +21,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 interface ChatBottombarProps {
   sendMessage: (newMessage: Message) => void;
   isMobile: boolean;
+  strippedLoggedInUserData: { id: string; name: string; avatar: string };
 }
 
 export const BottombarIcons = [{ icon: FileImage }, { icon: Paperclip }];
@@ -28,6 +29,7 @@ export const BottombarIcons = [{ icon: FileImage }, { icon: Paperclip }];
 export default function ChatBottombar({
   sendMessage,
   isMobile,
+  strippedLoggedInUserData,
 }: ChatBottombarProps) {
   const [message, setMessage] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -36,11 +38,11 @@ export default function ChatBottombar({
     setMessage(event.target.value);
   };
 
-  const handleThumbsUp = () => {
+  const handleThumbsUp = async () => {
     const newMessage: Message = {
       id: message.length + 1,
-      name: loggedInUserData.name,
-      avatar: loggedInUserData.avatar,
+      name: strippedLoggedInUserData.name,
+      avatar: strippedLoggedInUserData.avatar,
       content: "👍",
     };
     sendMessage(newMessage);
@@ -51,8 +53,8 @@ export default function ChatBottombar({
     if (message.trim()) {
       const newMessage: Message = {
         id: message.length + 1,
-        name: loggedInUserData.name,
-        avatar: loggedInUserData.avatar,
+        name: strippedLoggedInUserData.name,
+        avatar: strippedLoggedInUserData.avatar,
         content: message.trim(),
       };
       sendMessage(newMessage);

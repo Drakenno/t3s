@@ -10,13 +10,12 @@ import { cn } from "~/lib/utils";
 import Sidebar from "../sidebar";
 import { Chat } from "~/components/chat/chat";
 import {
-  getAllUserChatData,
   getAllUserChatDataExceptCurrentUser,
   getUserChatDataById,
   Message,
   UserChatData,
 } from "~/server/actions";
-import { Session } from "next-auth";
+import { Session, User } from "next-auth";
 
 type ChatLayoutProps = {
   defaultLayout: number[] | undefined;
@@ -28,6 +27,7 @@ type ChatLayoutProps = {
   // loggedInUserId: string;
   loggedInUserData: UserChatData[];
   session: Session | null;
+  strippedLoggedInUserData: { id: string; name: string; avatar: string };
 };
 export type LinkProperties = {
   id: string;
@@ -44,6 +44,7 @@ export default function ChatLayout({
   chatYN,
   loggedInUserData,
   session,
+  strippedLoggedInUserData,
 }: ChatLayoutProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
   // const [selectedUser, setSelectedUser] = React.useState<UserChatData>({
@@ -143,6 +144,7 @@ export default function ChatLayout({
           isMobile={isMobile}
           chatYN={chatYN}
           session={session}
+          // strippedLoggedInUserData={strippedLoggedInUserData}
         />
       </ResizablePanel>
       <ResizableHandle withHandle />
@@ -153,6 +155,7 @@ export default function ChatLayout({
             selectedUser={currentUserData}
             isMobile={isMobile}
             session={session}
+            strippedLoggedInUserData={strippedLoggedInUserData}
           />
         )}
       </ResizablePanel>
