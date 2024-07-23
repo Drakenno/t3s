@@ -152,6 +152,7 @@ export default function ChatLayout({
             messages={currentUserData.messages}
             selectedUser={currentUserData}
             isMobile={isMobile}
+            session={session}
           />
         )}
       </ResizablePanel>

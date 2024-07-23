@@ -6,7 +6,7 @@ export default async function Home() {
 
   return (
     <div>
-      <Link href={`/${session?.user.id}`}>Go to Chats</Link>
+      <Link href={`/users/${session?.user.id}`}>Go to Chats</Link>
     </div>
   );
 }

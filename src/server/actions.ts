@@ -276,3 +276,20 @@ export const getUserIdByName = async (name: string) => {
   });
   return user!.id;
 };
+
+export const messageDbPush = async (
+  newMessage: Message,
+  loggedInUserId: string,
+  selectedUserId: string,
+) => {
+  try {
+    await db.insert(messages).values({
+      content: newMessage.content,
+      senderID: loggedInUserId,
+      receiverID: selectedUserId,
+      created_at: new Date(),
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
