@@ -1,13 +1,14 @@
-import { Message, UserData } from "~/app/data";
+"use client";
+import { Message, UserChatData } from "~/server/actions";
 import ChatTopbar from "~/components/chat/chat-topbar";
 import { ChatList } from "~/components/chat/chat-list";
 import React from "react";
 
-interface ChatProps {
+type ChatProps = {
   messages?: Message[];
-  selectedUser: UserData;
+  selectedUser: UserChatData;
   isMobile: boolean;
-}
+};
 
 export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
   const [messagesState, setMessages] = React.useState<Message[]>(

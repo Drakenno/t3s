@@ -74,14 +74,16 @@ export const users = createTable("user", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  name: text("name"),
+  name: text("name").notNull(),
   email: text("email").notNull(),
   password: text("password"),
   role: text("role").$type<UserRole>().notNull().default("user"),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
-  image: varchar("avatar", { length: 1024 }).default(
-    "https://utfs.io/f/b5b33a74-6a71-4140-a418-cf7ec21a5f2b-qerhnf.jpg",
-  ),
+  image: varchar("avatar", { length: 1024 })
+    .notNull()
+    .default(
+      "https://utfs.io/f/b5b33a74-6a71-4140-a418-cf7ec21a5f2b-qerhnf.jpg",
+    ),
 });
 
 export const accounts = createTable(

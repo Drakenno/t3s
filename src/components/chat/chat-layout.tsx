@@ -1,6 +1,5 @@
 "use client";
 
-import { userData } from "~/app/data";
 import React, { useEffect, useState } from "react";
 import {
   ResizableHandle,
@@ -8,25 +7,75 @@ import {
   ResizablePanelGroup,
 } from "~/components/ui/resizable";
 import { cn } from "~/lib/utils";
-import { Sidebar } from "../sidebar";
+import Sidebar from "../sidebar";
 import { Chat } from "~/components/chat/chat";
+import {
+  getAllUserChatData,
+  getAllUserChatDataExceptCurrentUser,
+  getUserChatDataById,
+  Message,
+  UserChatData,
+} from "~/server/actions";
+import { Session } from "next-auth";
 
 type ChatLayoutProps = {
   defaultLayout: number[] | undefined;
   defaultCollapsed?: boolean;
   navCollapsedSize: number;
-  currentUserId: string;
+  // currentUserId?: string;
+  currentUserData: UserChatData;
+  chatYN: boolean;
+  // loggedInUserId: string;
+  loggedInUserData: UserChatData[];
+  session: Session | null;
 };
-
-export function ChatLayout({
+export type LinkProperties = {
+  id: string;
+  name: string;
+  messages: Message[];
+  avatar: string;
+  variant: "grey" | "ghost";
+};
+export default function ChatLayout({
   defaultLayout = [320, 480],
   defaultCollapsed = false,
   navCollapsedSize,
-  currentUserId,
+  currentUserData,
+  chatYN,
+  loggedInUserData,
+  session,
 }: ChatLayoutProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
-  const [selectedUser, setSelectedUser] = React.useState(userData[0]);
+  // const [selectedUser, setSelectedUser] = React.useState<UserChatData>({
+  //   id: "",
+  //   avatar: "",
+  //   messages: [],
+  //   name: "",
+  // });
   const [isMobile, setIsMobile] = useState(false);
+  const [data, setData] = useState<UserChatData[]>([]);
+  // const [clinks, setClinks] = useState<LinkProperties[]>([]);
+
+  // useEffect(() => {
+  //   const allData = async () => {
+  //     // console.log({ loggedInUserId: loggedInUserId });
+  //     // console.log({ currentUserId: currentUserId });
+  //     // console.log({ data: data });
+  //     // console.log({ chatYN: chatYN });
+  //     setData(data);
+  //   };
+  //   // const firstData = async () => {
+  //   //   // console.log({ loggedInUserId: loggedInUserId });
+  //   //   await getUserChatDataById(currentUserId!).then((selectedUser) => {
+  //   //     console.log({ selectedUser: selectedUser });
+  //   //     setSelectedUser(selectedUser);
+  //   //   });
+  //   // };
+  //   // firstData();
+  //   allData();
+  // }, []);
+
+  // const selectedUser = await firstData();
 
   useEffect(() => {
     const checkScreenWidth = () => {
@@ -80,22 +129,31 @@ export function ChatLayout({
       >
         <Sidebar
           isCollapsed={isCollapsed || isMobile}
-          links={userData.map((user) => ({
-            name: user.name,
-            messages: user.messages ?? [],
-            avatar: user.avatar,
-            variant: selectedUser?.name === user.name ? "grey" : "ghost",
-          }))}
+          links={loggedInUserData.map((user) => {
+            if (user.name === currentUserData.name) {
+            }
+            return {
+              id: user.id,
+              name: user.name,
+              messages: user.messages ?? [],
+              avatar: user.avatar,
+              variant: currentUserData.name === user.name ? "grey" : "ghost",
+            };
+          })}
           isMobile={isMobile}
+          chatYN={chatYN}
+          session={session}
         />
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-        <Chat
-          messages={selectedUser?.messages}
-          selectedUser={selectedUser!}
-          isMobile={isMobile}
-        />
+        {chatYN && (
+          <Chat
+            messages={currentUserData.messages}
+            selectedUser={currentUserData}
+            isMobile={isMobile}
+          />
+        )}
       </ResizablePanel>
     </ResizablePanelGroup>
   );

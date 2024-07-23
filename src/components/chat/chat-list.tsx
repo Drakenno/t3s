@@ -1,16 +1,16 @@
-import { Message, UserData } from "~/app/data";
+import { Message, UserChatData } from "~/server/actions";
 import { cn } from "~/lib/utils";
 import React, { useRef } from "react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import ChatBottombar from "./chat-bottombar";
 import { AnimatePresence, motion } from "framer-motion";
 
-interface ChatListProps {
+type ChatListProps = {
   messages?: Message[];
-  selectedUser: UserData;
+  selectedUser: UserChatData;
   sendMessage: (newMessage: Message) => void;
   isMobile: boolean;
-}
+};
 
 export function ChatList({
   messages,
@@ -26,6 +26,9 @@ export function ChatList({
         messagesContainerRef.current.scrollHeight;
     }
   }, [messages]);
+
+  // console.log({ messages: messages });
+  // console.log({ selectedUser: selectedUser });
 
   return (
     <div className="flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
@@ -72,7 +75,7 @@ export function ChatList({
                   </Avatar>
                 )}
                 <span className="max-w-xs rounded-md bg-accent p-3">
-                  {message.message}
+                  {message.content}
                 </span>
                 {message.name !== selectedUser.name && (
                   <Avatar className="flex items-center justify-center">

@@ -7,6 +7,7 @@ import {
   publicRoutes,
 } from "./routes";
 import NextAuth from "next-auth";
+import type { NextRequest } from "next/server";
 
 const { auth } = NextAuth(authConfig);
 
@@ -36,6 +37,12 @@ export default auth((req) => {
   return;
 });
 
+// export function middleware(request: NextRequest) {
+//   const nextUrl = request.nextUrl.pathname;
+//   const headers = new Headers(request.headers);
+//   headers.set("x-current-path", nextUrl);
+//   return NextResponse.next({ headers });
+// }
 export const config = {
   matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };

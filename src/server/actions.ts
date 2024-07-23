@@ -6,7 +6,7 @@ import { LoginSchema } from "~/app/auth/login";
 import bcrypt from "bcryptjs";
 import { db } from "./db";
 import { users, messages } from "./db/schema";
-import { and, desc, eq, or, sql } from "drizzle-orm";
+import { and, desc, eq, not, or, sql } from "drizzle-orm";
 import { signIn } from "~/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "~/routes";
 import { AuthError, User } from "next-auth";
@@ -90,19 +90,16 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
 
 export type Message = {
   id: number;
-  r_avatar: string;
-  sname: string;
-  sID: string;
-  rID: string;
+  name: string;
+  avatar: string;
   content: string;
 };
 
 export type UserChatData = {
   id: string;
-  name: string;
-  email: string;
   avatar: string;
   messages: Message[];
+  name: string;
 };
 
 // export const getUserChatData = async (userId: string) => {
@@ -190,18 +187,29 @@ export const getUserMessages = async (userId: string) => {
 };
 
 export const getImgById = async (id: string) => {
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, id),
-  });
+  try {
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, id),
+    });
+    return user!.image as string;
+  } catch (e) {
+    console.log(e);
+    return "";
+  }
   // console.log(user?.image);
-  return user?.image;
 };
 
 export const getNameById = async (id: string) => {
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, id),
-  });
-  return user?.name;
+  try {
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, id),
+    });
+
+    return user!.name;
+  } catch (error) {
+    console.log(error);
+    return " ";
+  }
 };
 
 export const getFormattedMessgesById = async (userId: string) => {
@@ -228,6 +236,43 @@ export const getUserChatDataById = async (userId: string) => {
     messages: formattedMessages,
     name: await getNameById(userId),
   };
-  console.log(result);
+  // console.log(result);
+
   return result;
+};
+
+export const getAllUserChatData = async () => {
+  const allUserIds = await db.select({ id: users.id }).from(users);
+  const allUserChatData = await Promise.all(
+    allUserIds.map(async (userId) => {
+      return await getUserChatDataById(userId.id);
+    }),
+  );
+
+  return allUserChatData;
+};
+
+export const getAllUserChatDataExceptCurrentUser = async (
+  loggedInID: string,
+) => {
+  console.log({ loggedInID: loggedInID });
+  const restUserIds = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(not(eq(users.id, loggedInID)));
+  console.log({ restUserIds: restUserIds });
+  const allUserChatData = await Promise.all(
+    restUserIds.map(async (userId) => {
+      return await getUserChatDataById(userId.id);
+    }),
+  );
+
+  return allUserChatData;
+};
+
+export const getUserIdByName = async (name: string) => {
+  const user = await db.query.users.findFirst({
+    where: eq(users.name, name),
+  });
+  return user!.id;
 };

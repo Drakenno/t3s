@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import Link from "next/link";
 import { MoreHorizontal, SquarePen } from "lucide-react";
@@ -11,21 +11,28 @@ import {
   TooltipProvider,
 } from "~/components/ui/tooltip";
 import { Avatar, AvatarImage } from "./ui/avatar";
-import { Message } from "~/app/data";
+import { LinkProperties } from "./chat/chat-layout";
+// import { headers } from "next/headers";
+import { Session } from "next-auth";
+import LinkCollapsed from "./link-collapsed";
+import Links from "./links";
 
 type SidebarProps = {
   isCollapsed: boolean;
-  links: {
-    name: string;
-    messages: Message[];
-    avatar: string;
-    variant: "grey" | "ghost";
-  }[];
-  onClick?: () => void;
+  links: LinkProperties[];
+  // onClick?: () => void;
   isMobile: boolean;
+  chatYN: boolean;
+  session: Session | null;
 };
 
-export function Sidebar({ links, isCollapsed, isMobile }: SidebarProps) {
+export default function Sidebar({
+  links,
+  isCollapsed,
+  isMobile,
+  chatYN,
+  session,
+}: SidebarProps) {
   return (
     <div
       data-collapsed={isCollapsed}
@@ -61,32 +68,18 @@ export function Sidebar({ links, isCollapsed, isMobile }: SidebarProps) {
           </div>
         </div>
       )}
+
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
         {links.map((link, index) =>
           isCollapsed ? (
-            <TooltipProvider key={index}>
-              <Tooltip key={index} delayDuration={0}>
+            <TooltipProvider key={link.id}>
+              <Tooltip key={link.id} delayDuration={0}>
                 <TooltipTrigger asChild>
-                  <Link
-                    href="#"
-                    className={cn(
-                      buttonVariants({ variant: link.variant, size: "icon" }),
-                      "h-11 w-11 md:h-16 md:w-16",
-                      link.variant === "grey" &&
-                        "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white",
-                    )}
-                  >
-                    <Avatar className="flex items-center justify-center">
-                      <AvatarImage
-                        src={link.avatar}
-                        alt={link.avatar}
-                        width={6}
-                        height={6}
-                        className="h-10 w-10"
-                      />
-                    </Avatar>{" "}
-                    <span className="sr-only">{link.name}</span>
-                  </Link>
+                  <LinkCollapsed
+                    chatYN={chatYN}
+                    session={session}
+                    link={link}
+                  ></LinkCollapsed>
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
@@ -97,39 +90,13 @@ export function Sidebar({ links, isCollapsed, isMobile }: SidebarProps) {
               </Tooltip>
             </TooltipProvider>
           ) : (
-            <Link
-              key={index}
-              href="#"
-              className={cn(
-                buttonVariants({ variant: link.variant, size: "xl" }),
-                link.variant === "grey" &&
-                  "shrink dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-                "justify-start gap-4",
-              )}
-            >
-              <Avatar className="flex items-center justify-center">
-                <AvatarImage
-                  src={link.avatar}
-                  alt={link.avatar}
-                  width={6}
-                  height={6}
-                  className="h-10 w-10"
-                />
-              </Avatar>
-              <div className="flex max-w-28 flex-col">
-                <span>{link.name}</span>
-                {link.messages.length > 0 && (
-                  <span className="truncate text-xs text-zinc-300">
-                    {
-                      link.messages[link.messages.length - 1]?.name.split(
-                        " ",
-                      )[0]
-                    }
-                    : {link.messages[link.messages.length - 1]?.message}
-                  </span>
-                )}
-              </div>
-            </Link>
+            <Links
+              // index={link.id}
+              key={link.id}
+              link={link}
+              chatYN={chatYN}
+              session={session}
+            />
           ),
         )}
       </nav>
