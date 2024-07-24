@@ -13,11 +13,11 @@ export default function Home({ params }: { params: { id: string } }) {
   return (
     <main className="flex h-[calc(100dvh)] flex-col items-center justify-center gap-4 p-4 py-32 md:px-24">
       <div className="flex w-full max-w-5xl items-center justify-between">
-        <Link href="#" className="text-gradient text-4xl font-bold">
+        {/* <Link href="#" className="text-gradient text-4xl font-bold">
           chat-trial
-        </Link>
+        </Link> */}
         <Link
-          href="https://github.com/jakobhoeg/shadcn-chat"
+          href="https://github.com/Drakenno/t3s"
           className={cn(
             buttonVariants({ variant: "ghost", size: "icon" }),
             "h-10 w-10",
@@ -34,7 +34,7 @@ export default function Home({ params }: { params: { id: string } }) {
       />
 
       <div className="flex w-full max-w-5xl items-start justify-between text-xs text-muted-foreground md:text-sm">
-        <p className="max-w-[150px] sm:max-w-lg">
+        {/* <p className="max-w-[150px] sm:max-w-lg">
           Built by{" "}
           <a className="font-semibold" href="https://github.com/Drakenno/">
             Drakenno
@@ -44,10 +44,10 @@ export default function Home({ params }: { params: { id: string } }) {
             shadcn
           </a>
           .
-        </p>
+        </p> */}
         <p className="max-w-[150px] text-right sm:max-w-lg">
           Source code available on{" "}
-          <a className="font-semibold" href="https://github.com/Drakenno/">
+          <a className="font-semibold" href="https://github.com/Drakenno/t3s">
             GitHub
           </a>
           .

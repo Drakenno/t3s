@@ -13,7 +13,7 @@ const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
   const { nextUrl } = req;
-  console.log("NEXTURL: ", nextUrl);
+  // console.log("NEXTURL: ", nextUrl);
   const isLoggedIn = !!req.auth;
   console.log("ROUTE: ", nextUrl.pathname);
   console.log("IS LOGGED IN: ", isLoggedIn);

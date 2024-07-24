@@ -30,8 +30,8 @@ export const posts = createTable(
   {
     id: serial("id").primaryKey(),
     url: varchar("url", { length: 1024 }).notNull(),
-    caption: varchar("caption", { length: 1024 }),
-    likes: integer("likes").default(0),
+    caption: varchar("caption", { length: 1024 }).default(" ").notNull(),
+    likes: integer("likes").default(0).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -58,16 +58,27 @@ export const messages = createTable("message", {
     .notNull(),
 });
 
+export type CommentType = {
+  id: number;
+  postID: number;
+  content: string;
+  likes: number;
+  created_at: Date;
+  userID: string;
+};
 export const comments = createTable("comment", {
   id: serial("id").primaryKey(),
   postID: integer("post_id")
     .notNull()
     .references(() => posts.id),
   content: text("content").notNull(),
-  likes: integer("likes").default(0),
+  likes: integer("likes").default(0).notNull(),
   created_at: timestamp("created_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
+  userID: text("userID")
+    .notNull()
+    .references(() => users.id),
 });
 
 export const users = createTable("user", {

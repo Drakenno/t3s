@@ -53,7 +53,7 @@ export function Navbarv0() {
             <MountainIcon className="h-6 w-6" />
             <span className="sr-only">Acme Inc</span>
           </Link>
-          <NavigationMenu>
+          {/* <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
@@ -89,7 +89,8 @@ export function Navbarv0() {
                 </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
-          </NavigationMenu>
+          </NavigationMenu> */}
+          <h1 className="text-lg font-bold text-primary">Social Media App</h1>
         </nav>
         <div className="flex items-center gap-2">
           {/* <Link
@@ -100,12 +101,12 @@ export function Navbarv0() {
             Sign In
           </Link> */}
           {/* <LoginBtn /> */}
-          <LoginBtn>
+          {/* <LoginBtn>
             <Button className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
               Sign In
             </Button>
-          </LoginBtn>
-          <DropdownMenu>
+          </LoginBtn> */}
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="h-9 w-9">
                 <AvatarImage src="/placeholder-user.jpg" />
@@ -118,7 +119,7 @@ export function Navbarv0() {
               <DropdownMenuSeparator />
               <DropdownMenuItem>Logout</DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
         </div>
       </div>
     </header>

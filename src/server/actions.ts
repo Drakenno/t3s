@@ -5,13 +5,14 @@ import { RegisterSchema } from "~/app/auth/register";
 import { LoginSchema } from "~/app/auth/login";
 import bcrypt from "bcryptjs";
 import { db } from "./db";
-import { users, messages } from "./db/schema";
+import { users, messages, posts, comments } from "./db/schema";
 import { and, desc, eq, not, or, sql } from "drizzle-orm";
 import { signIn } from "~/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "~/routes";
 import { AuthError, User } from "next-auth";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect";
+import { UserPost } from "~/components/component/dashboard";
 
 export type UserRole = "user" | "admin";
 
@@ -258,4 +259,38 @@ export const getStrippedloggedInUserData = async (id: string) => {
     .where(eq(users.id, id));
   // console.log({ user: user });
   return user[0]!;
+};
+
+export const getUserPosts = async (userID: string) => {
+  const userPosts = await db
+    .select()
+    .from(posts)
+    .where(eq(posts.userID, userID));
+
+  const allComments = await db.select().from(comments);
+  const userPostsWithComments = userPosts.map((post) => {
+    const comments = allComments.filter((comment) => {
+      return comment.postID === post.id;
+    });
+    return { ...post, comments };
+  });
+  const trial = await db
+    .select()
+    .from(posts)
+    .leftJoin(comments, eq(posts.id, comments.postID));
+  console.log({ ...trial });
+  return userPostsWithComments as UserPost[];
+};
+
+export const getloggedInUserData = async (userID: string) => {
+  const user = await db.select().from(users).where(eq(users.id, userID));
+  return user[0] as {
+    email: string;
+    password: string | null;
+    id: string;
+    name: string;
+    role: UserRole;
+    emailVerified: Date | null;
+    image: string;
+  };
 };

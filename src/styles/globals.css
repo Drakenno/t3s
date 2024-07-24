@@ -1,4 +1,4 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -68,5 +68,132 @@
   h5,
   h6 {
     @apply font-heading;
+  }
+  a {
+    @apply text-primary;
+    transition: color 0.3s;
+  }
+  a:hover {
+    @apply text-primary-foreground;
+  }
+  button {
+    @apply text-primary-foreground ;
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+  }
+  button:hover {
+    @apply bg-primary-foreground text-primary;
+  }
+  .card {
+    @apply rounded-lg bg-card p-4 text-card-foreground shadow-lg;
+    transition:
+      background-color 0.3s,
+      color 0.3s,
+      transform 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+  }
+} */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 15% 15%;
+    --foreground: 60 10% 95%;
+    --primary: 240 100% 80%;
+    --primary-foreground: 60 100% 10%;
+    --secondary: 240 20% 30%;
+    --secondary-foreground: 60 10% 90%;
+    --accent: 340 100% 70%;
+    --accent-foreground: 60 100% 100%;
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --muted: 240 10% 50%;
+    --muted-foreground: 60 10% 85%;
+    --card: 240 15% 20%;
+    --card-foreground: 60 10% 90%;
+    --popover: 240 10% 25%;
+    --popover-foreground: 60 10% 85%;
+    --border: 240 20% 30%;
+    --input: 240 20% 30%;
+    --ring: 240 50% 90%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 220 84% 10%;
+    --foreground: 210 70% 98%;
+    --card: 220 84% 10%;
+    --card-foreground: 210 70% 98%;
+    --popover: 220 84% 10%;
+    --popover-foreground: 210 70% 98%;
+    --primary: 210 90% 60%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 27.5%;
+    --secondary-foreground: 210 70% 98%;
+    --muted: 217.2 32.6% 27.5%;
+    --muted-foreground: 215 30.2% 65.1%;
+    --accent: 317.2 80% 45%;
+    --accent-foreground: 210 70% 98%;
+    --destructive: 0 80% 40%;
+    --destructive-foreground: 210 70% 98%;
+    --border: 217.2 32.6% 27.5%;
+    --input: 217.2 32.6% 27.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background font-sans text-foreground;
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+    line-height: 1.2;
+  }
+  a {
+    @apply text-primary;
+    transition: color 0.3s;
+  }
+  a:hover {
+    @apply text-primary-foreground;
+  }
+  button {
+    /* @apply text-primary-foreground ; */
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+  }
+  button:hover {
+    @apply bg-primary-foreground text-primary;
+  }
+  .card {
+    @apply rounded-lg bg-card p-4 text-card-foreground shadow-lg;
+    transition:
+      background-color 0.3s,
+      color 0.3s,
+      transform 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
   }
 }
