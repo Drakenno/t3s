@@ -48,6 +48,7 @@ import SimpleUploadBtn from "./simple-upload-btn";
 import { User } from "lucide-react";
 import UserCard from "./user-card";
 import { UserRole } from "~/server/actions";
+import SugesstedUserCard from "./suggested-user-card";
 
 export type UserPost = {
   id: number;
@@ -63,6 +64,7 @@ export type UserPost = {
 export default function Dashboard({
   userPosts,
   userDeets,
+  suggestedUsers,
 }: {
   userPosts: UserPost[];
   userDeets: {
@@ -74,115 +76,21 @@ export default function Dashboard({
     emailVerified: Date | null;
     image: string;
   };
+  suggestedUsers: {
+    id: string;
+    name: string;
+    avatar: string;
+  }[];
 }) {
   return (
     <div className="flex h-screen flex-col">
-      <header className="flex h-14 shrink-0 items-center justify-between border-b bg-background px-4 md:px-6">
-        <Link href="#" className="flex items-center gap-2" prefetch={false}>
-          {/* <MountainIcon className="h-6 w-6" /> */}
-          <span className="text-lg font-bold">Dashboard</span>
-        </Link>
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuLink asChild>
-              <Link
-                href={`/users/${userDeets?.id}`}
-                className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-                prefetch={false}
-              >
-                Messages
-              </Link>
-            </NavigationMenuLink>
-            <NavigationMenuLink asChild>
-              <Link
-                href="#"
-                className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-                prefetch={false}
-              >
-                All Posts
-              </Link>
-            </NavigationMenuLink>
-            {/* <NavigationMenuLink asChild>
-              <Link
-                href="#"
-                className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-                prefetch={false}
-              >
-                Notifications
-              </Link>
-            </NavigationMenuLink>
-            <NavigationMenuLink asChild>
-              <Link
-                href="#"
-                className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-                prefetch={false}
-              >
-                Profile
-              </Link>
-            </NavigationMenuLink> */}
-          </NavigationMenuList>
-        </NavigationMenu>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={userDeets?.image} />
-                <AvatarFallback>Aa</AvatarFallback>
-              </Avatar>
-              <span className="sr-only">Toggle user menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <div className="flex items-center gap-2 p-2">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={userDeets?.image} />
-                <AvatarFallback>Aa</AvatarFallback>
-              </Avatar>
-              <div className="grid gap-0.5 leading-none">
-                <div className="font-semibold">{userDeets?.name}</div>
-                <div className="text-sm text-muted-foreground">
-                  {userDeets?.email}
-                </div>
-              </div>
-            </div>
-            {/* <DropdownMenuSeparator /> */}
-            {/* <DropdownMenuItem>
-              <Link
-                href="#"
-                className="flex items-center gap-2"
-                prefetch={false}
-              >
-                <div className="h-4 w-4" />
-                <span>Profile</span>
-              </Link>
-            </DropdownMenuItem> */}
-            {/* <DropdownMenuItem>
-              <Link
-                href="#"
-                className="flex items-center gap-2"
-                prefetch={false}
-              >
-                <div className="h-4 w-4" />
-                <span>Settings</span>
-              </Link>
-            </DropdownMenuItem> */}
-            {/* <DropdownMenuSeparator /> */}
-            <DropdownMenuItem>
-              <Link
-                href="/api/auth/signout"
-                className="flex items-center gap-2"
-                prefetch={false}
-              >
-                <div className="h-4 w-4" />
-                <span>Sign out</span>
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </header>
       <div className="grid flex-1 grid-cols-3 gap-6 p-6">
         <div className="grid gap-6">
-          <PostLayout userPost={userPosts[0]!} userDeets={userDeets} />
+          {userPosts.map((userPost) => (
+            <div key={userPost.id}>
+              <PostLayout userPost={userPost} userDeets={userDeets} />
+            </div>
+          ))}
         </div>
         <div className="flex flex-col items-center space-y-4 rounded-lg p-4">
           <Card className="size-auto max-w-md border-0 shadow-none">
@@ -283,44 +191,13 @@ export default function Dashboard({
           <div className="grid gap-2">
             <div className="text-sm font-semibold">Suggested Connections</div>
             <div className="grid gap-2">
-              <Link
-                href="#"
-                className="flex items-center gap-2"
-                prefetch={false}
-              >
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src="/placeholder-user.jpg" />
-                  <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
-                <div>
-                  <div className="font-medium">Jane Doe</div>
-                  <div className="text-sm text-muted-foreground">@janedoe</div>
-                </div>
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-2"
-                prefetch={false}
-              >
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src="/placeholder-user.jpg" />
-                  <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
-                <div>
-                  <div className="font-medium">Bob Smith</div>
-                  <div className="text-sm text-muted-foreground">@bobsmith</div>
-                </div>
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-2"
-                prefetch={false}
-              >
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src="/placeholder-user.jpg" />
-                  <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
-              </Link>
+              {suggestedUsers.map((suggestedUser) => (
+                <SugesstedUserCard
+                  key={suggestedUser.id}
+                  suggestedUser={suggestedUser}
+                />
+              ))}
+              {/* <SugesstedUserCard suggestedUser={suggestedUsers[0]!} /> */}
             </div>
           </div>
         </div>

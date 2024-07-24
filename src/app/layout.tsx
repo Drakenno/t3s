@@ -3,6 +3,7 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { Navbarv0 } from "~/components/component/navbarv0";
+import DashLayWrapper from "~/components/dash-lay-wrapper";
 // import { db } from "~/server/db";
 // import { users } from "~/server/db/schema";
 
@@ -21,6 +22,7 @@ export default async function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <Navbarv0 />
+        {/* <DashLayWrapper /> */}
         {children}
       </body>
     </html>

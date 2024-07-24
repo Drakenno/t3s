@@ -9,13 +9,8 @@ import {
 import { cn } from "~/lib/utils";
 import Sidebar from "../sidebar";
 import { Chat } from "~/components/chat/chat";
-import {
-  getAllUserChatDataExceptCurrentUser,
-  getUserChatDataById,
-  Message,
-  UserChatData,
-} from "~/server/actions";
-import { Session, User } from "next-auth";
+import { Message, UserChatData } from "~/server/actions";
+import { Session } from "next-auth";
 
 type ChatLayoutProps = {
   defaultLayout: number[] | undefined;

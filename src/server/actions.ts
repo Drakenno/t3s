@@ -6,11 +6,10 @@ import { LoginSchema } from "~/app/auth/login";
 import bcrypt from "bcryptjs";
 import { db } from "./db";
 import { users, messages, posts, comments } from "./db/schema";
-import { and, desc, eq, not, or, sql } from "drizzle-orm";
+import { and, eq, not, or } from "drizzle-orm";
 import { signIn } from "~/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "~/routes";
-import { AuthError, User } from "next-auth";
-import { redirect } from "next/navigation";
+import { AuthError } from "next-auth";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { UserPost } from "~/components/component/dashboard";
 
@@ -293,4 +292,37 @@ export const getloggedInUserData = async (userID: string) => {
     emailVerified: Date | null;
     image: string;
   };
+};
+
+export type allPosts = {
+  posts: {
+    id: number;
+    url: string;
+    caption: string;
+    likes: number;
+    createdAt: Date;
+    userID: string;
+    // userName?: string;
+  };
+  userName: string;
+  userImg: string;
+};
+
+export const getAllPosts = async () => {
+  const allPosts = await db
+    .select({ posts: posts, userName: users.name, userImg: users.image })
+    .from(posts)
+    .leftJoin(users, eq(posts.userID, users.id));
+
+  return allPosts as allPosts[];
+};
+
+export const getSuggestedUsers = async (userID: string) => {
+  const allUsers = await db
+    .select({ id: users.id, name: users.name, avatar: users.image })
+    .from(users)
+    .where(not(eq(users.id, userID)));
+
+  const shuffled = Array.from(allUsers).sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 3);
 };

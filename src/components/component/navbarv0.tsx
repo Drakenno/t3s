@@ -39,6 +39,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "~/components/ui/avatar";
 import { LoginBtn } from "./login-btn";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import DashLayWrapper from "../dash-lay-wrapper";
 
 export function Navbarv0() {
   return (
@@ -120,6 +121,7 @@ export function Navbarv0() {
               <DropdownMenuItem>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu> */}
+          <DashLayWrapper />
         </div>
       </div>
     </header>

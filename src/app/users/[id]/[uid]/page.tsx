@@ -3,14 +3,14 @@ import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { cn } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
 import Link from "next/link";
-import { auth } from "~/auth";
-import ChatLayout from "~/components/chat/chat-layout";
+// import { auth } from "~/auth";
+// import ChatLayout from "~/components/chat/chat-layout";
 import ChatLayoutWrapper from "~/components/chat/chat-layout-wrapper";
 
 export default async function Home({ params }: { params: { uid: string } }) {
   const layout = cookies().get("react-resizable-panels:layout");
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
-  const session = await auth();
+  // const session = await auth();
 
   return (
     <main className="flex h-[calc(100dvh)] flex-col items-center justify-center gap-4 p-4 py-32 md:px-24">

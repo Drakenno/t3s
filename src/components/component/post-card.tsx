@@ -24,14 +24,15 @@ import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import Image from "next/image";
+import { allPosts } from "~/server/actions";
 
-export function PostCard() {
+export default function PostCard({ post }: { post: allPosts }) {
   const [isLiked, setIsLiked] = useState(false);
   return (
-    <Card className="group w-full max-w-md">
+    <Card className="group max-w-md">
       <CardContent className="p-0">
         <Image
-          src="/placeholder.svg"
+          src={post.posts.url}
           alt="Post image"
           width={800}
           height={600}
@@ -42,12 +43,14 @@ export function PostCard() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Avatar>
-              <AvatarImage src="/placeholder-user.jpg" />
+              <AvatarImage src={post.userImg} />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className="grid gap-1">
-              <div className="font-medium">Shadcn</div>
-              <div className="text-sm text-muted-foreground">@shadcn</div>
+              <div className="font-medium">{post.userName}</div>
+              <div className="text-sm text-muted-foreground">
+                @{post.userName}
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -64,8 +67,7 @@ export function PostCard() {
           </div>
         </div>
         <p className="mt-4 text-sm text-muted-foreground">
-          This is a sample caption for the post. It can contain text, emojis,
-          and other content.
+          {post.posts.caption}
         </p>
       </CardFooter>
     </Card>

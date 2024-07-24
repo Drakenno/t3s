@@ -14,6 +14,9 @@ import {
   HeartIcon,
   MessageCircleIcon,
   SendIcon,
+  DeleteIcon,
+  Delete,
+  Trash2Icon,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardHeader, CardContent, CardFooter } from "../ui/card";
@@ -21,6 +24,7 @@ import Link from "next/link";
 import { UserPost } from "./dashboard";
 import CommentLayout from "./comment-layout";
 import { UserRole } from "~/server/actions";
+import Image from "next/image";
 
 export default function PostLayout({
   userPost,
@@ -47,7 +51,7 @@ export default function PostLayout({
         >
           <Avatar className="h-8 w-8 border">
             <AvatarImage src="/placeholder-user.jpg" />
-            <AvatarFallback>AC</AvatarFallback>
+            <AvatarFallback>Aa</AvatarFallback>
           </Avatar>
           {userDeets?.name ?? "Anonymous"}
         </Link>
@@ -79,12 +83,13 @@ export default function PostLayout({
         </DropdownMenu>
       </CardHeader>
       <CardContent className="p-0">
-        <img
+        <Image
           src={userPost?.url ?? "/placeholder.svg"}
           width={400}
           height={400}
           alt="Image"
           className="aspect-square object-cover"
+          priority={true}
         />
       </CardContent>
       <CardFooter className="grid gap-2 p-2 pb-4">
@@ -102,8 +107,8 @@ export default function PostLayout({
             <span className="sr-only">Share</span>
           </Button>
           <Button variant="ghost" size="icon" className="ml-auto">
-            <BookmarkIcon className="h-4 w-4" />
-            <span className="sr-only">Comment</span>
+            <Trash2Icon className="h-4 w-4" />
+            <span className="sr-only">Delete</span>
           </Button>
         </div>
         <CommentLayout
