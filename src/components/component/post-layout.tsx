@@ -106,7 +106,10 @@ export default function PostLayout({
             <span className="sr-only">Comment</span>
           </Button>
         </div>
-        <CommentLayout userComments={userPost?.comments} />
+        <CommentLayout
+          userComments={userPost?.comments}
+          userDeets={userDeets}
+        />
       </CardFooter>
     </Card>
   );
