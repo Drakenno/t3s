@@ -18,11 +18,7 @@ To read more about using these font, please visit the Next.js documentation:
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
 import Link from "next/link";
-import {
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuLink,
-} from "~/components/ui/navigation-menu";
+
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -32,20 +28,12 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Button } from "~/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "~/components/ui/avatar";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-} from "~/components/ui/card";
+import { Card, CardHeader, CardContent } from "~/components/ui/card";
 import { JSX, SVGProps } from "react";
 import { Textarea } from "../ui/textarea";
-import { UploadButton } from "~/lib/uploadthing";
-import PostUploadButton from "./post-upload-btn";
 import { CommentType } from "~/server/db/schema";
 import PostLayout from "./post-layout";
 import SimpleUploadBtn from "./simple-upload-btn";
-import { User } from "lucide-react";
 import UserCard from "./user-card";
 import { UserRole } from "~/server/actions";
 import SugesstedUserCard from "./suggested-user-card";
@@ -97,8 +85,8 @@ export default function Dashboard({
             <CardHeader className="flex flex-row items-center p-4">
               <div className="flex items-center gap-4">
                 <Avatar className="h-8 w-8 border">
-                  <AvatarImage src="/placeholder-user.jpg" />
-                  <AvatarFallback>AC</AvatarFallback>
+                  <AvatarImage src={userDeets?.image} />
+                  <AvatarFallback>Aa</AvatarFallback>
                 </Avatar>
                 <div>
                   <div className="font-semibold">{userDeets?.name}</div>
@@ -133,26 +121,7 @@ export default function Dashboard({
               </DropdownMenu>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="flex flex-col items-center justify-center space-y-4 p-8">
-                <Textarea
-                  placeholder="What's on your mind?"
-                  className="w-full rounded-lg border border-input bg-transparent px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                <div className="flex flex-grow-0 flex-row items-center gap-2 p-2">
-                  <SimpleUploadBtn />
-                  <Button variant="ghost" size="icon">
-                    <VideoIcon className="h-4 w-4" />
-                    <span className="sr-only">Add video</span>
-                  </Button>
-                  <Button variant="ghost" size="icon">
-                    <SmileIcon className="h-4 w-4" />
-                    <span className="sr-only">Add emoji</span>
-                  </Button>
-                  <Button className="ml-auto inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
-                    Post
-                  </Button>
-                </div>
-              </div>
+              <SimpleUploadBtn userID={userDeets?.id} />
             </CardContent>
           </Card>
         </div>

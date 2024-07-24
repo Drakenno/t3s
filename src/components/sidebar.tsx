@@ -1,5 +1,3 @@
-// "use client";
-
 import Link from "next/link";
 import { MoreHorizontal, SquarePen } from "lucide-react";
 import { cn } from "~/lib/utils";
@@ -10,7 +8,6 @@ import {
   TooltipTrigger,
   TooltipProvider,
 } from "~/components/ui/tooltip";
-import { Avatar, AvatarImage } from "./ui/avatar";
 import { LinkProperties } from "./chat/chat-layout";
 // import { headers } from "next/headers";
 import { Session } from "next-auth";
@@ -29,8 +26,7 @@ type SidebarProps = {
 export default function Sidebar({
   links,
   isCollapsed,
-  isMobile,
-  chatYN,
+
   session,
 }: SidebarProps) {
   return (
@@ -75,11 +71,7 @@ export default function Sidebar({
             <TooltipProvider key={link.id}>
               <Tooltip key={link.id} delayDuration={0}>
                 <TooltipTrigger asChild>
-                  <LinkCollapsed
-                    // chatYN={chatYN}
-                    session={session}
-                    link={link}
-                  ></LinkCollapsed>
+                  <LinkCollapsed session={session} link={link}></LinkCollapsed>
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
@@ -90,13 +82,7 @@ export default function Sidebar({
               </Tooltip>
             </TooltipProvider>
           ) : (
-            <Links
-              // index={link.id}
-              key={link.id}
-              link={link}
-              // chatYN={chatYN}
-              session={session}
-            />
+            <Links key={link.id} link={link} session={session} />
           ),
         )}
       </nav>

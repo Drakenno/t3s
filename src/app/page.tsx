@@ -10,6 +10,7 @@
 // import { auth } from "~/auth";
 // import { redirect } from "next/dist/server/api-utils";
 import { permanentRedirect } from "next/navigation";
+import { auth } from "~/auth";
 export default async function HomePage() {
   // const session = await auth();
   // const userPosts = await getUserPosts(session?.user.id);

@@ -32,7 +32,10 @@ export const authConfig = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
-    Discord,
+    Discord({
+      clientId: env.DISCORD_CLIENT_ID,
+      clientSecret: env.DISCORD_CLIENT_SECRET,
+    }),
     Credentials({
       credentials: { email: {}, password: {} },
       authorize: async (credentials) => {

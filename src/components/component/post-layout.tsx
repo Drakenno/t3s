@@ -14,8 +14,6 @@ import {
   HeartIcon,
   MessageCircleIcon,
   SendIcon,
-  DeleteIcon,
-  Delete,
   Trash2Icon,
 } from "lucide-react";
 import { Button } from "../ui/button";
@@ -25,6 +23,8 @@ import { UserPost } from "./dashboard";
 import CommentLayout from "./comment-layout";
 import { UserRole } from "~/server/actions";
 import Image from "next/image";
+import DeleteButton from "./deletepostbtn";
+import { Separator } from "@radix-ui/react-separator";
 
 export default function PostLayout({
   userPost,
@@ -50,7 +50,7 @@ export default function PostLayout({
           prefetch={false}
         >
           <Avatar className="h-8 w-8 border">
-            <AvatarImage src="/placeholder-user.jpg" />
+            <AvatarImage src={userDeets?.image} />
             <AvatarFallback>Aa</AvatarFallback>
           </Avatar>
           {userDeets?.name ?? "Anonymous"}
@@ -88,12 +88,16 @@ export default function PostLayout({
           width={400}
           height={400}
           alt="Image"
-          className="aspect-square object-cover"
-          priority={true}
+          className="p-4"
+          // priority={true}
         />
+        <div className="flex flex-col items-start px-4">
+          <p className="text-md">{userPost?.caption}</p>
+          <Separator className="h-px bg-primary/20" />
+        </div>
       </CardContent>
       <CardFooter className="grid gap-2 p-2 pb-4">
-        <div className="flex w-full items-center">
+        <div className="flex w-full items-center justify-evenly">
           <Button variant="ghost" size="icon">
             <HeartIcon className="h-4 w-4" />
             <span className="sr-only">Like</span>
@@ -106,10 +110,7 @@ export default function PostLayout({
             <SendIcon className="h-4 w-4" />
             <span className="sr-only">Share</span>
           </Button>
-          <Button variant="ghost" size="icon" className="ml-auto">
-            <Trash2Icon className="h-4 w-4" />
-            <span className="sr-only">Delete</span>
-          </Button>
+          <DeleteButton userPost={userPost} />
         </div>
         <CommentLayout
           userComments={userPost?.comments}

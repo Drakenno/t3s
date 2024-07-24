@@ -70,7 +70,7 @@ export const comments = createTable("comment", {
   id: serial("id").primaryKey(),
   postID: integer("post_id")
     .notNull()
-    .references(() => posts.id),
+    .references(() => posts.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
   likes: integer("likes").default(0).notNull(),
   created_at: timestamp("created_at", { withTimezone: true })

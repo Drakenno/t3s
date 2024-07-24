@@ -1,5 +1,5 @@
 import { auth } from "~/auth";
-import { getloggedInUserData, getUserPosts } from "~/server/actions";
+import { getloggedInUserData } from "~/server/actions";
 import {
   DropdownMenu,
   DropdownMenuContent,

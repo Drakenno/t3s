@@ -326,3 +326,33 @@ export const getSuggestedUsers = async (userID: string) => {
   const shuffled = Array.from(allUsers).sort(() => Math.random() - 0.5);
   return shuffled.slice(0, 3);
 };
+
+export const deletePost = async (postID: number) => {
+  const deletedPost = await db
+    .delete(posts)
+    .where(eq(posts.id, postID))
+    .returning();
+  return deletedPost;
+};
+
+export const createPost = async (
+  url: string,
+  caption: string,
+  userID: string,
+) => {
+  const newPost = await db
+    .insert(posts)
+    .values({ url: url, userID: userID, caption: caption });
+  return newPost;
+};
+
+export const increaseLikes = async (id: number, likes: number) => {
+  const newLikes = await db
+    .update(posts)
+    .set({
+      likes: likes + 1,
+    })
+    .where(eq(posts.id, id));
+
+  return newLikes;
+};

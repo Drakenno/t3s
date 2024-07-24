@@ -24,10 +24,25 @@ import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import Image from "next/image";
-import { allPosts } from "~/server/actions";
+import { allPosts, increaseLikes } from "~/server/actions";
+import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
 
 export default function PostCard({ post }: { post: allPosts }) {
-  const [isLiked, setIsLiked] = useState(false);
+  const router = useRouter();
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [likes, setLikes] = useState<number>(post.posts.likes);
+  const handleLike = async () => {
+    setIsLiked((isLiked) => !isLiked);
+    if (isLiked) {
+      setLikes((likes) => likes - 1);
+    } else {
+      setLikes((likes) => likes + 1);
+    }
+    const postID = post.posts.id;
+    router.refresh();
+  };
+
   return (
     <Card className="group max-w-md">
       <CardContent className="p-0">
@@ -53,17 +68,21 @@ export default function PostCard({ post }: { post: allPosts }) {
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col items-center px-2">
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setIsLiked(!isLiked)}
+              onClick={handleLike}
               className={`text-muted-foreground ${isLiked ? "text-red-500" : ""}`}
             >
-              <HeartIcon className="h-5 w-5" />
+              {!isLiked ? (
+                <HeartIcon className="h-5 w-5" />
+              ) : (
+                <HeartFilledIcon className="h-5 w-5" />
+              )}
               <span className="sr-only">Like</span>
             </Button>
-            <span className="text-sm font-medium">120</span>
+            <span className="text-sm font-medium">{likes}</span>
           </div>
         </div>
         <p className="mt-4 text-sm text-muted-foreground">
@@ -73,42 +92,3 @@ export default function PostCard({ post }: { post: allPosts }) {
     </Card>
   );
 }
-
-function HeartIcon(props: { className?: string }) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-    </svg>
-  );
-}
-
-// function XIcon() {
-//   return (
-//     <svg
-//       // {...props}
-//       xmlns="http://www.w3.org/2000/svg"
-//       width="24"
-//       height="24"
-//       viewBox="0 0 24 24"
-//       fill="none"
-//       stroke="currentColor"
-//       strokeWidth="2"
-//       strokeLinecap="round"
-//       strokeLinejoin="round"
-//     >
-//       <path d="M18 6 6 18" />
-//       <path d="m6 6 12 12" />
-//     </svg>
-//   );
-// }
